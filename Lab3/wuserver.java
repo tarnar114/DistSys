@@ -17,23 +17,25 @@ public class wuserver
         try (ZContext context = new ZContext()) {
             ZMQ.Socket publisher = context.createSocket(SocketType.PUB);
             publisher.bind("tcp://*:5556");
-            publisher.bind("ipc://weather");
 
+            int postalCode;
+            for(postalCode=0;postalCode<10;postalCode++){
+                publisher.send(String.format("%d", postalCode),ZMQ.SNDMORE);
+            }
             //  Initialize random number generator
-            Random srandom = new Random(System.currentTimeMillis());
+            Random random = new Random(System.currentTimeMillis());
             while (!Thread.currentThread().isInterrupted()) {
                 //  Get values that will fool the boss
-                int zipcode, temperature, relhumidity;
-                zipcode = 10000 + srandom.nextInt(10000);
-                temperature = srandom.nextInt(215) - 80 + 1;
-                relhumidity = srandom.nextInt(50) + 10 + 1;
-
-                //  Send message to all subscribers
-                String update = String.format(
-                    "%05d %d %d", zipcode, temperature, relhumidity
-                );
-                publisher.send(update, 0);
+                Thread.sleep(500);
+                String data=String.format("%d",random.nextInt(100000) );
+                String dest=String.format("%d", random.nextInt(10000));
+                publisher.send(dest, ZMQ.SNDMORE);
+                publisher.send(data);
+                System.out.println("Code: [" + dest + "]: Population: " + data);
+                
             }
+            publisher.close();
+            
         }
     }
 }
