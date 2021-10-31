@@ -28,7 +28,7 @@ public class wuserver
                 //  Get values that will fool the boss
                 Thread.sleep(500);
                 String data=String.format("%d",random.nextInt(100000) );
-                String dest=String.format("%d", random.nextInt(10000));
+                String dest=String.format("%d", random.nextInt(10));
                 publisher.send(dest, ZMQ.SNDMORE);
                 publisher.send(data);
                 System.out.println("Code: [" + dest + "]: Population: " + data);

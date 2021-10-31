@@ -16,10 +16,18 @@ public class ClientTest1 {
 
             ZMQ.Socket socket = context.createSocket(SocketType.REQ);
             socket.connect("tcp://localhost:5555");
+            System.out.println("connected");
             //socket.send("Hello", 0);
             String request = "Hello";
+            System.out.println("Sending Hello ");
             socket.send(request.getBytes(ZMQ.CHARSET), 0);
             System.out.println(new String(socket.recv(0)));
+            byte[] reply = socket.recv(0);
+                System.out.println(
+                    "Received " + new String(reply, ZMQ.CHARSET)
+                    
+                );
+
         }
     }
 }

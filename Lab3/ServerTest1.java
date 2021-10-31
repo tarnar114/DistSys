@@ -16,13 +16,18 @@ public class ServerTest1 {
             socket.bind("tcp://*:5555");
             System.out.println("Waiting for connections...");
 
-            while(true) {
+            while(!Thread.currentThread().isInterrupted()) {
+                System.out.println("connected");
+
                 byte[] reply = socket.recv(0);
 
                 //socket.send("World", 0);
-
+                System.out.println(
+                    "Received " + ": [" + new String(reply, ZMQ.CHARSET) + "]"
+                  );
                 String response = "World";
-                socket.send(response.getBytes(ZMQ.CHARSET), 0);       
+                socket.send(response.getBytes(ZMQ.CHARSET), 0); 
+                Thread.sleep(1000);       
             }
         }
     }
